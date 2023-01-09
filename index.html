@@ -1,0 +1,39 @@
+<script type="module">
+    // import kaboom lib
+    import kaboom from "https://unpkg.com/kaboom/dist/kaboom.mjs";
+    
+    // initialize kaboom context
+    kaboom({
+        scale: 5
+    });
+    
+    loadRoot('sprites/')
+    loadSprite('asteroid', 'asteroid.png')
+    loadSprite('bg', 'bg.png')
+    loadSprite('bullet', 'bullet.png')
+    loadSprite('small_asteroid', 'small_asteroid.png')
+    loadSprite('spaceship', 'spaceship.png')
+    loadSprite('thruster_1', 'thruster_1.png')
+    loadSprite('thruster_2', 'thruster_2.png')
+    loadSprite('thruster_3', 'thruster_3.png')
+    loadSprite('thruster_4', 'thruster_4.png')
+
+    scene('main', () => {
+        layers([
+            'bg',
+            'obj',
+            'ui'
+        ], 'obj')
+
+        add([
+            sprite('bg', {
+                width: width(),
+                height: height(),
+                tiled: true
+            }),
+            layer('bg')
+        ])
+    })
+
+    go('main')
+</script>
