@@ -18,6 +18,12 @@
     loadSprite('thruster_3', 'thruster_3.png')
     loadSprite('thruster_4', 'thruster_4.png')
 
+    // TO-DO: fix this function and rework on spaceship movement
+    function pointAt(distance, angle) {
+        let radians = -1 * deg2rad(angle)
+        return vec2(distance * Math.sin(radians), distance * Math.cos(radians))
+    }
+
     scene('main', () => {
         layers([
             'bg',
@@ -33,6 +39,68 @@
             }),
             layer('bg')
         ])
+
+        let score = 0
+
+        const ui = add([
+            layer('ui')
+        ])
+
+        ui.on('draw', () => {
+            drawText({
+                text: "Score: " + score,
+                size: 5,
+                font: "sink",
+                pos: vec2(8, 10)
+            })
+        })
+
+        const player = add([
+            sprite("spaceship"),
+            pos(50, 50),
+            rotate(0),
+            origin("center"),
+            solid(),
+            area(),
+            "player",
+            "mobile",
+            "wraps",
+            {
+                turn_speed: 4.58,
+                speed: 0,
+                max_thrust: 48,
+                acceleration: 2,
+                deceleration: 4,
+                lives: 3,
+                can_shoot: true,
+                laser_cooldown: 0.5,
+                invulnerable: false,
+                invulnerablity_time: 3,
+                animation_frame: 0,
+                thrusting: false
+            }
+        ])
+
+        onKeyDown('left', () => {
+            player.angle -= player.turn_speed
+        })
+
+        onKeyDown('right', () => {
+            player.angle += player.turn_speed
+        })
+
+        onKeyDown('down', () => {
+            player.speed = Math.min(player.speed + player.acceleration, player.max_thrust)
+        })
+
+        onKeyDown('up', () => {
+            player.speed = Math.max(player.speed - player.acceleration, -player.max_thrust)
+        })
+
+        onUpdate('mobile', (obj) => {
+            obj.move(pointAt(obj.speed, obj.angle))
+        })
+    // end scene    
     })
 
     go('main')
