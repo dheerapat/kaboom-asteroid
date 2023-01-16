@@ -20,8 +20,8 @@
 
     // TO-DO: fix this function and rework on spaceship movement
     function pointAt(distance, angle) {
-        let radians = -1 * deg2rad(angle)
-        return vec2(distance * Math.sin(radians), distance * Math.cos(radians))
+        let radians = deg2rad(90-angle)
+        return vec2(distance * Math.cos(radians), -distance * Math.sin(radians))
     }
 
     scene('main', () => {
@@ -89,16 +89,21 @@
             player.angle += player.turn_speed
         })
 
-        onKeyDown('down', () => {
+        onKeyDown('up', () => {
             player.speed = Math.min(player.speed + player.acceleration, player.max_thrust)
         })
 
-        onKeyDown('up', () => {
+        onKeyDown('down', () => {
             player.speed = Math.max(player.speed - player.acceleration, -player.max_thrust)
         })
 
         onUpdate('mobile', (obj) => {
             obj.move(pointAt(obj.speed, obj.angle))
+        })
+        
+        // debug zone
+        onUpdate(() => {
+            debug.log(player.angle)
         })
     // end scene    
     })
